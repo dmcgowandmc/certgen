@@ -17,8 +17,8 @@ RANDFILE          = private/.rand
 
 # The root key and root certificate.
 # I HAVE DISABLED AND CALL THESE SETTING IN THE COMMAND ITSELF
-#private_key       = private/ca.key.pem
-#certificate       = certs/ca.cert.pem
+private_key       = private/rootca.key.pem
+certificate       = certs/rootca.cert.pem
 
 # For certificate revocation lists.
 crlnumber         = crlnumber
@@ -82,7 +82,7 @@ emailAddress                    = Email Address
 countryName_default             = AU
 stateOrProvinceName_default     = Victoria
 localityName_default            = Melbourne
-0.organizationName_default      = SSL Test Root CA
+0.organizationName_default      = SSL Test
 organizationalUnitName_default  = Testing Department
 commonName_default		= SSL Test Root CA
 emailAddress_default            = dmcgowan@iinet.net.au

@@ -55,11 +55,13 @@ echo "******************************************************"
 echo "Signing the intermediate Certificate Authority Request"
 echo "******************************************************"
 cd ..
-openssl ca -config rootca.cnf -extensions v3_intermediate_ca -days 3750 -notext -md sha256 -keyfile private/rootca.key.pem -cert certs/rootca.cert.pem -in intermediate/csr/intermediateca.csr.pem -out intermediate/certs/intermediateca.cert.pem
+openssl ca -config rootca.cnf -extensions v3_intermediate_ca -days 3750 -notext -md sha256 -in intermediate/csr/intermediateca.csr.pem -out intermediate/certs/intermediateca.cert.pem
+chmod 444 intermediate/certs/intermediateca.cert.pem
 
 #verify the root certificate authority
-#echo ""
-#echo "*************************************"
-#echo "Verify the root Certificate Authority"
-#echo "*************************************"
-#openssl x509 -noout -text -in certs/rootca.cert.pem
+echo ""
+echo "*************************************"
+echo "Verify the intermediate Certificate Authority"
+echo "*************************************"
+cd intermediate
+openssl x509 -noout -text -in certs/intermediateca.cert.pem

@@ -8,20 +8,21 @@ default_ca = CA_default
 [ CA_default ]
 # Directory and file locations.
 #dir               = rootca/intermediate
-certs             = $dir/certs
-crl_dir           = $dir/crl
-new_certs_dir     = $dir/newcerts
-database          = $dir/index.txt
-serial            = $dir/serial
-RANDFILE          = $dir/private/.rand
+certs             = certs
+crl_dir           = crl
+new_certs_dir     = newcerts
+database          = index.txt
+serial            = serial
+RANDFILE          = private/.rand
 
 # The root key and root certificate.
-private_key       = $dir/private/intermediate.key.pem
-certificate       = $dir/certs/intermediate.cert.pem
+# I HAVE DISABLED AND CALL THESE SETTING IN THE COMMAND ITSELF
+private_key       = private/intermediateca.key.pem
+certificate       = certs/intermediateca.cert.pem
 
 # For certificate revocation lists.
-crlnumber         = $dir/crlnumber
-crl               = $dir/crl/intermediate.crl.pem
+crlnumber         = crlnumber
+crl               = crl/intermediate.crl.pem
 crl_extensions    = crl_ext
 default_crl_days  = 30
 
@@ -81,7 +82,7 @@ emailAddress                    = Email Address
 countryName_default             = AU
 stateOrProvinceName_default     = Victoria
 localityName_default            = Melbourne
-0.organizationName_default      = SSL Test Intermediate CA
+0.organizationName_default      = SSL Test
 organizationalUnitName_default  = Testing Department
 commonName_default		= SSL Test Intermediate CA
 emailAddress_default            = dmcgowan@iinet.net.au
