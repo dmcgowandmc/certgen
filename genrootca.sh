@@ -2,23 +2,32 @@
 
 #This Script will generate a root CA and Key
 
-ROOTDIR="rootca"
+#Check if a root directory name has been provided. Exit if not provided
+if [[ -z $1 ]]; then
+	echo "**************************************************************************"
+	echo "You must enter a name for the root dir (which will default as the CN name)"
+	echo "**************************************************************************"
+	exit 1
+fi
+
+ROOTDIR=$1
 
 #Setup directory structure
-if [[ -d $ROOTDIR ]]; then
+if [[ -d workspace/$ROOTDIR ]]; then
 	echo "*****************************"
 	echo "Recreating $ROOTDIR Structure"
 	echo "*****************************"
-        rm -R $ROOTDIR
+        rm -R workspace/$ROOTDIR
 else
 	echo "***************************"
 	echo "Creating $ROOTDIR Structure"
 	echo "***************************"
 fi
 
-mkdir $ROOTDIR
-cp rootca.cnf $ROOTDIR
-cd $ROOTDIR
+mkdir -p workspace
+mkdir workspace/$ROOTDIR
+sed s/REPLACE/$ROOTDIR/g rootca.cnf > workspace/${ROOTDIR}/${ROOTDIR}.cnf
+cd workspace/$ROOTDIR
 mkdir certs crl newcerts private
 chmod 700 private
 touch index.txt
@@ -30,19 +39,19 @@ echo "*******************************"
 echo "Generating the root Private Key"
 echo "*******************************"
 
-openssl genrsa -aes256 -out private/rootca.key.pem 4096
-chmod 400 private/rootca.key.pem
+openssl genrsa -aes256 -out private/${ROOTDIR}.key.pem 4096
+chmod 400 private/${ROOTDIR}.key.pem
 
 #generate the root certificate authority
 echo ""
 echo "*****************************************"
 echo "Generating the root Certificate Authority"
 echo "*****************************************"
-openssl req -config rootca.cnf -key private/rootca.key.pem -new -x509 -days 3750 -sha256 -extensions v3_ca -out certs/rootca.cert.pem
+openssl req -config ${ROOTDIR}.cnf -key private/${ROOTDIR}.key.pem -new -x509 -days 3750 -sha256 -extensions v3_ca -out certs/${ROOTDIR}.cert.pem
 
 #verify the root certificate authority
 echo ""
 echo "*************************************"
 echo "Verify the root Certificate Authority"
 echo "*************************************"
-openssl x509 -noout -text -in certs/rootca.cert.pem
+openssl x509 -noout -text -in certs/${ROOTDIR}.cert.pem

@@ -16,13 +16,12 @@ serial            = serial
 RANDFILE          = private/.rand
 
 # The root key and root certificate.
-# I HAVE DISABLED AND CALL THESE SETTING IN THE COMMAND ITSELF
-private_key       = private/rootca.key.pem
-certificate       = certs/rootca.cert.pem
+private_key       = private/REPLACE.key.pem
+certificate       = certs/REPLACE.cert.pem
 
 # For certificate revocation lists.
 crlnumber         = crlnumber
-crl               = crl/ca.crl.pem
+crl               = crl/REPLACE.crl.pem
 crl_extensions    = crl_ext
 default_crl_days  = 30
 
@@ -82,10 +81,10 @@ emailAddress                    = Email Address
 countryName_default             = AU
 stateOrProvinceName_default     = Victoria
 localityName_default            = Melbourne
-0.organizationName_default      = SSL Test
-organizationalUnitName_default  = Testing Department
-commonName_default		= SSL Test Root CA
-emailAddress_default            = dmcgowan@iinet.net.au
+0.organizationName_default      = My Company
+organizationalUnitName_default  = My Root Department
+commonName_default		= REPLACE
+emailAddress_default            = mycompany@company.com
 
 [ v3_ca ]
 # Extensions for a typical CA (`man x509v3_config`).
