@@ -22,20 +22,21 @@ if [[ ! -d workspace/$ROOTDIR ]]; then
 fi
 
 #Setup intermediate directory structure
-if [[ -d workspace/$ROOTDIR/$INTERDIR ]]; then
-	echo "***************************************"
-	echo "Recreating $ROOTDIR/$INTERDIR Structure"
-	echo "***************************************"
-        rm -R workspace/$ROOTDIR/$INTERDIR
+if [[ -d workspace/$ROOTDIR/workspace/$INTERDIR ]]; then
+	echo "*************************************************"
+	echo "Recreating $ROOTDIR/workspace/$INTERDIR Structure"
+	echo "*************************************************"
+        rm -R workspace/$ROOTDIR/workspace/$INTERDIR
 else
-	echo "*************************************"
-	echo "Creating $ROOTDIR/$INTERDIR Structure"
-	echo "*************************************"
+	echo "***********************************************"
+	echo "Creating $ROOTDIR/workspace/$INTERDIR Structure"
+	echo "***********************************************"
 fi
 
-mkdir workspace/$ROOTDIR/$INTERDIR
-sed s/REPLACE/$INTERDIR/g intermediateca.cnf > workspace/${ROOTDIR}/${INTERDIR}/${INTERDIR}.cnf
-cd workspace/$ROOTDIR/$INTERDIR
+mkdir -p workspace/$ROOTDIR/workspace
+mkdir workspace/$ROOTDIR/workspace/$INTERDIR
+sed s/REPLACE/$INTERDIR/g intermediateca.cnf > workspace/${ROOTDIR}/workspace/${INTERDIR}/${INTERDIR}.cnf
+cd workspace/$ROOTDIR/workspace/$INTERDIR
 mkdir certs crl csr newcerts private
 chmod 700 private
 touch index.txt
@@ -54,7 +55,7 @@ chmod 400 private/${INTERDIR}.key.pem
 #generate the intermediate certificate request
 echo ""
 echo "*********************************************************"
-echo "Generating the intermediate Certificate Authority Request"
+echo "Generating the Intermediate Certificate Authority Request"
 echo "*********************************************************"
 openssl req -config ${INTERDIR}.cnf -new -sha256 -key private/${INTERDIR}.key.pem -out csr/${INTERDIR}.csr.pem
 
@@ -63,10 +64,10 @@ echo ""
 echo "******************************************************"
 echo "Signing the Intermediate Certificate Authority Request"
 echo "******************************************************"
-cd ..
-openssl ca -config ${ROOTDIR}.cnf -extensions v3_intermediate_ca -days 3750 -notext -md sha256 -in ${INTERDIR}/csr/${INTERDIR}.csr.pem -out ${INTERDIR}/certs/${INTERDIR}.cert.pem
-chmod 444 intermediate/certs/intermediateca.cert.pem
-cd $INTERDIR
+cd ../..
+openssl ca -config ${ROOTDIR}.cnf -extensions v3_intermediate_ca -days 3750 -notext -md sha256 -in workspace/${INTERDIR}/csr/${INTERDIR}.csr.pem -out workspace/${INTERDIR}/certs/${INTERDIR}.cert.pem
+chmod 444 workspace/${INTERDIR}/certs/${INTERDIR}.cert.pem
+cd workspace/$INTERDIR
 
 #verify the intermediate certificate authority
 echo ""
@@ -80,13 +81,13 @@ echo ""
 echo "************************************************************************************"
 echo "Verify the Intermediate Certificate Authority against the Root Certificate Authority"
 echo "************************************************************************************"
-cd ..
-openssl verify -CAfile certs/${ROOTDIR}.cert.pem ${INTERDIR}/certs/${INTERDIR}.cert.pem
+cd ../..
+openssl verify -CAfile certs/${ROOTDIR}.cert.pem workspace/${INTERDIR}/certs/${INTERDIR}.cert.pem
 
 #finally, create the intermediate certificate authority chain
 echo ""
 echo "***************************************************"
 echo "Create the Intermediate Certificate Authority Chain"
 echo "***************************************************"
-cat ${INTERDIR}/certs/${INTERDIR}.cert.pem certs/${ROOTDIR}.cert.pem > ${INTERDIR}/certs/${INTERDIR}-chain.cert.pem
-cd $INTERDIR
+cat workspace/${INTERDIR}/certs/${INTERDIR}.cert.pem certs/${ROOTDIR}.cert.pem > workspace/${INTERDIR}/certs/${INTERDIR}-chain.cert.pem
+cd workspace/$INTERDIR

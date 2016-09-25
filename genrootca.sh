@@ -52,6 +52,6 @@ openssl req -config ${ROOTDIR}.cnf -key private/${ROOTDIR}.key.pem -new -x509 -d
 #verify the root certificate authority
 echo ""
 echo "*************************************"
-echo "Verify the root Certificate Authority"
+echo "Verify the Root Certificate Authority"
 echo "*************************************"
 openssl x509 -noout -text -in certs/${ROOTDIR}.cert.pem
