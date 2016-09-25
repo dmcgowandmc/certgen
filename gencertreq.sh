@@ -40,7 +40,7 @@ echo "*********************************************************************"
 openssl genrsa -out workspace/${CNNAME}/${CNNAME}.key.pem 2048
 chmod 400 workspace/${CNNAME}/${CNNAME}.key.pem
 
-#generate the intermediate certificate request
+#generate the server certificate request
 echo ""
 echo "***************************************************"
 echo "Generating the Server or Client Certificate Request"
